@@ -29,8 +29,7 @@ jobs:
           echo architecture=${{ steps.flutter-action.outputs.architecture }}
         shell: bash
       
-      - name: Build Web Application
-        run: flutter --version
+      - run: flutter --version
       - run: flutter pub get
       - run: flutter test
       - run: flutter build web  --release
