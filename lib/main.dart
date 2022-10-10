@@ -45,6 +45,7 @@ class RandomWords extends StatefulWidget {
 
 class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
+  final _saved = <WordPair>[];
   final _biggerFont = const TextStyle(fontSize: 18);
   @override
   Widget build(BuildContext context) {
@@ -56,13 +57,42 @@ class _RandomWordsState extends State<RandomWords> {
         if (index >= _suggestions.length) {
           _suggestions.addAll(generateWordPairs().take(10));
         }
-        return ListTile(
-          title: Text(
-            _suggestions[index].asPascalCase,
-            style: _biggerFont,
-          ),
-        );
+        final alreadySaved = _saved.contains(_suggestions[index]);
+        final tileText = _suggestions[index].asPascalCase;
+        return MyListTile(
+            tileText: tileText,
+            biggerFont: _biggerFont,
+            alreadySaved: alreadySaved);
       },
+    );
+  }
+}
+
+class MyListTile extends StatelessWidget {
+  const MyListTile({
+    Key? key,
+    required this.tileText,
+    required TextStyle biggerFont,
+    required this.alreadySaved,
+  })  : _biggerFont = biggerFont,
+        super(key: key);
+
+  final String tileText;
+  final TextStyle _biggerFont;
+  final bool alreadySaved;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        tileText,
+        style: _biggerFont,
+      ),
+      trailing: Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+        semanticLabel: alreadySaved ? "Remove from saved" : "Save",
+      ),
     );
   }
 }
