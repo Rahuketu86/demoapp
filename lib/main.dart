@@ -58,41 +58,26 @@ class _RandomWordsState extends State<RandomWords> {
           _suggestions.addAll(generateWordPairs().take(10));
         }
         final alreadySaved = _saved.contains(_suggestions[index]);
-        final tileText = _suggestions[index].asPascalCase;
-        return MyListTile(
-            tileText: tileText,
-            biggerFont: _biggerFont,
-            alreadySaved: alreadySaved);
+
+        final tileText = _suggestions[index];
+        return ListTile(
+          title: Text(tileText.asPascalCase, style: _biggerFont),
+          trailing: Icon(
+            alreadySaved ? Icons.favorite : Icons.favorite_border,
+            color: alreadySaved ? Colors.red : null,
+            semanticLabel: alreadySaved ? "Remove from saved" : "Save",
+          ),
+          onTap: () {
+            setState(() {
+              if (alreadySaved) {
+                _saved.remove(tileText);
+              } else {
+                _saved.add(tileText);
+              }
+            });
+          },
+        );
       },
-    );
-  }
-}
-
-class MyListTile extends StatelessWidget {
-  const MyListTile({
-    Key? key,
-    required this.tileText,
-    required TextStyle biggerFont,
-    required this.alreadySaved,
-  })  : _biggerFont = biggerFont,
-        super(key: key);
-
-  final String tileText;
-  final TextStyle _biggerFont;
-  final bool alreadySaved;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        tileText,
-        style: _biggerFont,
-      ),
-      trailing: Icon(
-        alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
-        semanticLabel: alreadySaved ? "Remove from saved" : "Save",
-      ),
     );
   }
 }
